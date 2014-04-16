@@ -83,3 +83,8 @@ The module will be a sub division from our ```SCOPE``` project and will help to 
 console.log(SCOPE.MyModule1);
 // MyModule1 {}
 ```
+
+...
+
+### Final ###
+![Final structure](https://raw.githubusercontent.com/juliogc/oojavascript/master/images/final-structure.jpg)
