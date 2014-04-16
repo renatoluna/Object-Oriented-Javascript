@@ -12,13 +12,12 @@ By now, our code will be more short and divided in more effective parts.
 ## Concept ##
 Before start coding, let's undestand a little bit more about the proposed nomenclatures and, after, how it will work.
 
-What it is     | How it's represented    | Name        | How to write
-:--------------|:------------------------|:-----------:|:-----------:
-**Scope**      | Literal Object ```{}``` | SCOPE       | UPPERCASE
-**Module**     | ```function () {}```    | MyModule    | PascalCase
-**Class**      | ```function () {}```    | MyClass     | PascalCase
-**Sub Module** | ```function () {}```    | MySubModule | PascalCase
-**Instances**  | Variables ```var```     | myInstance  | camelCase
+What it is     | How it's represented                                | Name        | How to write
+:--------------|:----------------------------------------------------|:-----------:|:-----------:
+**Scope**      | Literal Object ```{}```                             | SCOPE       | UPPERCASE
+**Module**     | Imediatly-invoked function ```(function () {})()``` | MyModule    | PascalCase
+**Sub Module** | Imediatly-invoked function ```(function () {})()``` | MySubModule | PascalCase
+**Class**      | Regular function ```function () {}```               | MyClass     | PascalCase
 
 In javascript community exists a very acceptable way to code classes or modules, like this:
 ``` javascript
@@ -33,7 +32,7 @@ function MyClass () {
 // Defining our instance
 var myClass = new Class();
 ```
- This is very cool and it works very well, but, by doing this, every single time that you uses the ```myClass``` variable into your code it was a reference to a instance of ```MyClass```. This could be very unusual in some contexts, like if you're trying to ```prototype``` some ***new method*** in the respective class and that's the reason why this concept was created.
+ This is very cool and it works fine. Doing this, each time you uses the ```myClass``` variable into your code it was building a instance of ```MyClass```. This could be very unusual in some contexts, like if you want to access the ```constructor``` to ```prototype``` some ***new method*** in the respective class and that's the reason why this concept was created.
 
 
 ## Getting Started ##
@@ -42,19 +41,45 @@ Let's begin creating an global object that will contains the global ```scope```.
 *From now, the initial comment in double slashes ```//``` will reference the name of the files in [scripts]("https://github.com/juliogc/oojavascript/tree/master/scripts") folder.*
 
 ``` javascript
-// scope.js
-var SCOPE = SCOPE || {};
+// scripts/scope.js
+(function (window, document, undefined) {
+    var SCOPE = SCOPE || {};
 
-window.SCOPE = SCOPE;
+    window.SCOPE = SCOPE;
+    
+    return window.SCOPE;
+})(this, document);
+```
+This imediatly-invoked function takes the ```window``` object with main scope and puts a literal object that will serve to store our project instances in a global **scope**. After load this you'll be able to invoke```window.SCOPE``` or just ```SCOPE``` every time you need to use this.
+
+Sample:
+```
+console.log(SCOPE);
+// Object {}
 ```
 
-After this, we can use this global **scope** object to store all project instances. Be thorough now to define what wi'll be your **modules**, **classes** and **sub modules**. 
+Be thorough now to define what will be your **modules**, **sub modules** and **classes**. You define what's the importance for each one.
+
 
 ### Module ###
-Is a big set of **classes**, or **sub modules**, that united will bring to us a large amount of features.
+The module will be a sub division from our ```SCOPE``` project and will help to store a amount of **classes** and **sub modules**. Because of this, the **Modules** will ever be self instantiate with a imediatly-invoked function, so we can dispense the use of parenthesis ```()``` and make a cleaner organizational tree.
 
-How a module will never be used, just your internal utilities, in javascript we can set up this in a self invoked function, so we can dispense the use of parenthesis ```()``` to make a instance on the module reference.
+*Note: The closure function will take the SCOPE in the argument, not the global object ```window``` like we did before.*
 
 ``` javascript
-// scripts/modules/myModule1
+// scripts/modules/MyModule1/MyModule1.js
+(function (namespace) {
+    function MyModule1 () {
+        // logic here
+    };
+    
+    SCOPE.MyModule1 = (function () {
+        return new MyModule1();
+    })();
+    
+    return SCOPE.MyModule1;
+})(SCOPE);
+
+console.log(SCOPE.MyModule1);
+// MyModule1 {}
 ```
