@@ -1,0 +1,33 @@
+<snippet>
+	<content><![CDATA[
+(function (namespace) {
+	function ${2:Module} () {
+	/* 
+	    Internal namespaces
+	   ========================================================================== */
+		var \$private = {};
+		var \$protected = this;
+		var \$public = \$protected.constructor.prototype;
+
+	/* 
+	    Privates
+	   ========================================================================== */
+		${0}
+	/* 
+	    Publics
+	   ========================================================================== */
+
+		return \$protected;
+	}
+
+	${1:SCOPE}.${2:Module} = (function () {
+		return new ${2:Module}();
+	})(); 
+
+	return ${1:SCOPE}.${2:Module};
+})(${1:SCOPE});
+]]></content>
+	<tabTrigger>Module</tabTrigger>
+	<scope>source.js</scope>
+	<description>Module for OO JS</description>
+</snippet>
