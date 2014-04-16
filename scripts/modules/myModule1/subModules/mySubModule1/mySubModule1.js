@@ -2,8 +2,6 @@
     $ MySubModule1 Module
    ========================================================================== */
 (function (namespace) {
-	var mySubModule1;
-
 	function MySubModule1 () {
 	/* 
 	    Internal scope namespaces
@@ -30,11 +28,11 @@
 /* ==========================================================================
     $ Self invoking function to make an autoinstance just for modules
    ========================================================================== */
-	SCOPE.myModule1.mySubModule1 = mySubModule1 = (function () {
+	SCOPE.MyModule1.MySubModule1 = (function () {
 		return new MySubModule1();
 	})();
 
-	mySubModule1.fn = MySubModule1.prototype;
+	SCOPE.MyModule1.MySubModule1.fn = MySubModule1.prototype;
 
-	return SCOPE.myModule1.mySubModule1;
-})(SCOPE.myModule1); 
+	return SCOPE.MyModule1.MySubModule1;
+})(SCOPE.MyModule1); 

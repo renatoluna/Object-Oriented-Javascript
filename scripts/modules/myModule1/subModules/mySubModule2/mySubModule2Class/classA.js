@@ -2,8 +2,6 @@
     $ ClassA Class
    ========================================================================== */
 (function (namespace) {
-	var classA;
-
 	function ClassA (element) {
 	/* 
 	    Internal scope namespaces
@@ -45,11 +43,11 @@
 /* ==========================================================================
     $ Not a self invoking function, the instance will depend with the usage
    ========================================================================== */
-	SCOPE.myModule1.mySubModule2.classA = classA = function (element) {
+	SCOPE.MyModule1.MySubModule2.ClassA = function (element) {
 		return new ClassA(element);
 	};
 
-	classA.fn = ClassA.prototype;
+	SCOPE.MyModule1.MySubModule2.ClassA.fn = ClassA.prototype;
 
-	return SCOPE.myModule1.mySubModule2.classA
-})(SCOPE.myModule1.mySubModule2); 
+	return SCOPE.MyModule1.MySubModule2.ClassA
+})(SCOPE.MyModule1.MySubModule2); 
