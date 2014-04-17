@@ -2,4 +2,4 @@
 	
 	console.log(SCOPE);
 
-})(this, document, window.SCOPE); 
+})(this, document, window.SCOPE);

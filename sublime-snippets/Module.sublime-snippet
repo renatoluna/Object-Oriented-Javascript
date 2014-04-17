@@ -22,7 +22,9 @@
 
 	${1:SCOPE}.${2:Module} = (function () {
 		return new ${2:Module}();
-	})(); 
+	})();
+
+	${1:SCOPE}.${2:Module}.fn = ${2:Module}.prototype;
 
 	return ${1:SCOPE}.${2:Module};
 })(${1:SCOPE});

@@ -4,7 +4,7 @@
 
 Read more in [wikipedia](http://en.wikipedia.org/wiki/Object_Oriented "Object Oriented Article").
 
-We all know that the ```javascript``` isn't an **full** object oriented program language, but, in order to make our work more simple and organized, was started an more modular way to work.
+We all know that the ```javascript``` isn't an **full** object oriented program language, but, in order to make our workore simple and organized, was started an more modular way to work.
 
 By now, our code will be more short and divided in more effective parts.
 
@@ -32,7 +32,7 @@ function MyClass () {
 // Defining our instance
 var myClass = new Class();
 ```
- This is very cool and it works fine. Doing this, each time you uses the ```myClass``` variable into your code it was building a instance of ```MyClass```. This could be very unusual in some contexts, like if you want to access the ```constructor``` to ```prototype``` some ***new method*** in the respective class and that's the reason why this concept was created.
+ This is very cool and it works fine. Doing this, each time you uses the ```myClass``` variable into your code it was building a instance of ```MyClass```. This could be very unusual in some contexts, like if you want to access the ```constructor``` to ```prototype``` some **new method** in the respective class and that's the reason why this concept was created.
 
 
 ## Getting Started ##
