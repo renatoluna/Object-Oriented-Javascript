@@ -1,0 +1,10 @@
+<snippet>
+	<content><![CDATA[
+\$private.${1:methodName} = function () {
+	${0:// body}
+};
+]]></content>
+	<tabTrigger>private</tabTrigger>
+	<scope>source.js</scope>
+	<description>Class for OO JS</description>
+</snippet>
