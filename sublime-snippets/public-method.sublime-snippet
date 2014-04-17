@@ -6,5 +6,5 @@
 ]]></content>
 	<tabTrigger>public</tabTrigger>
 	<scope>source.js</scope>
-	<description>Class for OO JS</description>
+	<description>$public method for OO JS</description>
 </snippet>

@@ -6,5 +6,5 @@
 ]]></content>
 	<tabTrigger>private</tabTrigger>
 	<scope>source.js</scope>
-	<description>Class for OO JS</description>
+	<description>$private method for OO JS</description>
 </snippet>
