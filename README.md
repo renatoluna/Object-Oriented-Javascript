@@ -1,90 +1,107 @@
-# Object Oriented Javascript #
+# Javascript Orientado a Objetos #
 
-**Prerequisite:** Basic knowledge in object oriented concepts.
+- - -
 
-Read more in [wikipedia](http://en.wikipedia.org/wiki/Object_Oriented "Object Oriented Article").
+**Pré-requisitos:** Conhecimento básico em orientação a objetos e javascript.
 
-We all know that the ```javascript``` isn't an **full** object oriented program language, but, in order to make our workore simple and organized, was started an more modular way to work.
+Leia mais em [wikipedia](http://en.wikipedia.org/wiki/Object_Oriented "Object Oriented Article").
 
-By now, our code will be more short and divided in more effective parts.
+- - - 
 
+Como todos sabem, o ```javascript``` não possuí **classes** e isso é ótimo para esta linguagem em particular, mas essa situação é um grande causador de dúvidas/problemas/polêmicas para programadores experientes em outras linguagens.
 
-## Concept ##
-Before start coding, let's undestand a little bit more about the proposed nomenclatures and, after, how it will work.
+Mesmo sendo diferente de outras linguagens clássicas na forma de implementar a orientação a objetos, o conceito é extamente o mesmo e fazemos isso visando uma forma de trabalhar que seja simples e organizada, para evitar um possível *code refactoring* ou métodos duplicados.
 
-What it is     | How it's represented                                | Name        | How to write
-:--------------|:----------------------------------------------------|:-----------:|:-----------:
-**Scope**      | Literal Object ```{}```                             | SCOPE       | UPPERCASE
-**Module**     | Imediatly-invoked function ```(function () {})()``` | MyModule    | PascalCase
-**Sub Module** | Imediatly-invoked function ```(function () {})()``` | MySubModule | PascalCase
-**Class**      | Regular function ```function () {}```               | MyClass     | PascalCase
+## Conceito ##
+Todos sabemos que, no javascript, quase tudo é um objeto, até funções e expreções regulares. Um ```objeto``` é algo provido de características e faz determinadas coisas, comumente conhecidos como **propriedades** e **métodos**, respectivamente.
 
-In javascript community exists a very acceptable way to code classes or modules, like this:
+Também sabemos que o javascript é desprovido de **classes**, mas que a linguagem tem a capacidade de gerar novos objetos que herdem as propriedades de seus construtores, o que nos possibilita simular essa funcionalidade.
+
+Atualmente, na comunidade javascript, já existe um modo aceitável de gerar classes e módulos, como o exemplo abaixo:
 ``` javascript
-// This sample was build simulating a class, but the same concept
-// can be applied to modules and sub modules.
+// Exemplo de simulação de classe em JS
+// Pode ser aplicado para criação de módulos também
 
-// Defining our class
+// Definindo a classe
 function MyClass () {
     // logic goes here...
 }
 
-// Defining our instance
+// Gerando uma instância desta classe
 var myClass = new Class();
 ```
- This is very cool and it works fine. Doing this, each time you uses the ```myClass``` variable into your code it was building a instance of ```MyClass```. This could be very unusual in some contexts, like if you want to access the ```constructor``` to ```prototype``` some **new method** in the respective class and that's the reason why this concept was created.
 
+Este código é bastante interessante e funciona bem. Ao fazer isso, cada vez que utilizar a variável ```myClass```, será feita uma referência a uma insância da classe ```MyClass```, dando acesso à todos os seus métodos públicos. Essa prática pode ser pouco usual em determinados contextos como, por exemplo, seja necessário realizar um ```prototype``` de um novo método diretamente no ```constructor``` da respectiva classe.
 
-## Getting Started ##
-Let's begin creating an global object that will contains the global ```scope```. *By default it is suggested be named with the project´s name or the sponsor's organization name*. This is a good patrice for organization and to improve the memory management in code processing.
+Antes de nos aprofundarmos nesta nova metodologia proposta de herança no javascritp, vamos entender um pouco mais a funcionalidade de ```constructors```, ```prototype``` e da palavra restrita ```new```.
 
-*From now, the initial comment in double slashes ```//``` will reference the name of the files in [scripts]("https://github.com/juliogc/oojavascript/tree/master/scripts") folder.*
+### O que é um ```construtor```? ###
+Pode ser denominado como construtor qualquer função utilizada como construtora, a linguagem não faz uma distinção com relação a isso. Uma função pode ser utilizada com função de construtora, para ser chamada como uma função normal ou de ambos os jeitos.
 
-``` javascript
-// scripts/scope.js
-(function (window, document, undefined) {
-    var SCOPE = SCOPE || {};
+O construtor padrão do javascript será sempre o objeto ```Window {}```.
 
-    window.SCOPE = SCOPE;
+```javascript
+function MyClass () {
+    var $protected = this;
     
-    return window.SCOPE;
-})(this, document);
-```
-This imediatly-invoked function takes the ```window``` object with main scope and puts a literal object that will serve to store our project instances in a global **scope**. After load this you'll be able to invoke```window.SCOPE``` or just ```SCOPE``` every time you need to use this.
-
-Sample:
-```
-console.log(SCOPE);
-// Object {}
-```
-
-Be thorough now to define what will be your **modules**, **sub modules** and **classes**. You define what's the importance for each one.
-
-
-### Module ###
-The module will be a sub division from our ```SCOPE``` project and will help to store a amount of **classes** and **sub modules**. Because of this, the **Modules** will ever be self instantiate with a imediatly-invoked function, so we can dispense the use of parenthesis ```()``` and make a cleaner organizational tree.
-
-*Note: The closure function will take the SCOPE in the argument, not the global object ```window``` like we did before.*
-
-``` javascript
-// scripts/modules/MyModule1/MyModule1.js
-(function (namespace) {
-    function MyModule1 () {
-        // logic here
+    function getConstructor () {
+        console.log($protected.constructor);
     };
-    
-    SCOPE.MyModule1 = (function () {
-        return new MyModule1();
-    })();
-    
-    return SCOPE.MyModule1;
-})(SCOPE);
 
-console.log(SCOPE.MyModule1);
-// MyModule1 {}
+    getConstructor();
+    
+    return $protected;
+};
+
+// O javascript interpreta esta construção como:
+// window.MyClass = function () {...}
+
+MyClass();
+window.MyClass();
+// Ambos mostram Window {} no console.
 ```
 
-...
+Trabalhar em cima do objeto window, conhecido por **escopo global**, sempre foi uma prática abominada por todos, seja pelo fato de não poluírmos um contexto que é comum a todos como, também, por questões de segurança da informção.
 
-### Final ###
-![Final structure](https://raw.githubusercontent.com/juliogc/oojavascript/master/images/final-structure.jpg)
+O único jeito de invocarmos o modo construtor é a partir da palavra ```new```.
+
+### O que acontece quando um construtor é chamado? ###
+Quando chamamos ```new MyClass()```, o javascript faz quatro coisas:
+
+#### **1)** Cria um novo objeto: ####
+
+Nenhuma execução em especial, apenas cria um novo objeto vazio: ```{}```.
+
+#### **2)** Aponta a propriedade **construtora** deste objeto para a função utilizada (**MyClass**, neste exemplo): ####
+
+Isso pode ser visto através de:
+```javascript
+var myClass = new MyClass();
+
+myClass; // Retorna MyClass {} no console
+
+myClass.constructor == MyClass // true
+myClass instanceof MyClass // true
+```
+
+#### **3)** Delega a este novo objeto o ```MyClass.prototype```: ####
+
+Uma ```Function``` é um tipo especial de objeto que, como qualquer objeto comum possui propriedades. Ao chamar uma função, ela ganha automaticamente uma propriedade chamada ```prototype```, que será um objeto literal ```{}``` onde serão armazenados todos os métodos e propriedades ditos como **públicos**, sendo identificados no escopo do próprio construtor pelo uso da palavra ```this```.
+
+Caso não exista nenhum método ou propriedade no escopo público, será criado um objeto **vazio**. Significando, então, que sempre existirá a propriedade ```prototype``` ao final da chamada de nossas funções, seja ele vazio ou contendo métodos e propriedades públicos.
+
+```javascript
+MyClass.prototype.version = 1.0.0;
+var myClass = new MyClass();
+myClass.version; // Exibe 1.0.0 no console
+```
+
+A instância ```myClass``` herdou do **prototype** de **MyClass** a propriedade ```version```.
+
+#### **4)** É chamada a função ```MyClass``` no contexto do objeto que antes era vazio: ####
+Lembrando do método ```getConstructor``` criado inicialmente em **MyClass** e utilizando ```new``` para criarmos uma nova instância da nossa classe genérica, obteremos um log diferente de ```Window {}```.
+
+```javascript
+var myClass = new MyClass();
+// Exibe no MyClass {} no console
+```
