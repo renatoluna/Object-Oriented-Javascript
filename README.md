@@ -99,9 +99,136 @@ myClass.version; // Exibe 1.0.0 no console
 A instância ```myClass``` herdou do **prototype** de **MyClass** a propriedade ```version```.
 
 #### **4)** É chamada a função ```MyClass``` no contexto do objeto que antes era vazio: ####
-Lembrando do método ```getConstructor``` criado inicialmente em **MyClass** e utilizando ```new``` para criarmos uma nova instância da nossa classe genérica, obteremos um log diferente de ```Window {}```.
+Lembrando do método ```getConstructor``` criado inicialmente em **MyClass** e utilizando ```new``` para gerar uma nova instância da nossa classe genérica, obteremos um log diferente, desta vez, que difere do objeto ```Window {}```.
 
 ```javascript
 var myClass = new MyClass();
 // Exibe no MyClass {} no console
 ```
+
+Baseando-se no que foi dito, é possível aprofundar um pouco mais neste assunto que tem como objetivo final um código legível e organizado.
+
+
+## Vamos começar ##
+Olhando, desta vez, para o lado humano do javascript (programadores), foi criado um padrão de divisão, escrita e uso de cada instância que varia de acordo com suas referências.
+
+Vamos a elas:
+
+O que é        | Como será escrito                                     | Nome        | Modo de escrita
+:--------------|:------------------------------------------------------|:-----------:|:--------------:
+**Escopo**     | Literal Object ```{}```                               | SCOPE       | UPPERCASE
+**Módulo**     | Função anônima auto-invocada ```(function () {})()``` | MyModule    | PascalCase
+**Sub Módulo** | Função anônima auto-invocada ```(function () {})()``` | MySubModule | PascalCase
+**Classe**     | Função anônima ```function () {}```                   | MyClass     | PascalCase
+
+Primeiramente, começamos criando um objeto no nosso escopo global. Este objeto será a única intervenção feita no objeto ```Window {}``` e, a partir dele, estabeleceremos comunição interna entre os ditos módulos, sub módulos e classes. Além de organizar, esta prática visa uma melhoria na gestão de memória durante o processamento do código.
+
+**Para facilitar ao diferenciar dos métodos e propriedades padrões contidas no escopo global, é sugerido que o nome da variável que irá armazenar seja um acrônimo de 3 a 5 letras que se referencie ao nome do projeto ou orgaização mantenedora.**
+
+*Para melhor entendimento, a partir de agora, o primeiro comentário do código a ser explicado será o nome de seu respectivo arquivo existente no diretório [scripts]("https://github.com/juliogc/oojavascript/tree/master/scripts").*
+
+``` javascript
+// scripts/scope.js
+(function (window, document, undefined) {
+    var SCOPE = SCOPE || {};
+
+    window.SCOPE = SCOPE;
+    
+    return window.SCOPE;
+})(this, document);
+```
+Nossa função inicial de encapsulamento recebe o o objeto ```Window {}``` como argumento e insere o objeto literal criado ```SCOPE {}``` que servirá para armazenar toda a lógica daqui em diante. Apos isto, ficará disponível no escopo global o objeto ```window.SCOPE``` (ou somente ```SCOPE```) para cada vez que for necessário utilizá-lo.
+
+Exemplo:
+```
+console.log(SCOPE);
+// Object {}
+```
+
+### Módulos e Sub Módulos ###
+Os módulos e/ou sub módulos serão uma sub divisão do ```SCOPE {}``` e terá como única função a de agrupar e armazenar classes referentes ao mesmo contexto do fluxo de trabalho. Por conta disso, os módulos serão definidos por funções anônimas auto-invocadas, sendo dispensável o uso de parenteses ```()``` em sua instância para se gerar uma árvore organizacional mais limpa.
+
+*Nota: Observe que, desta vez, a função de encapsulamento receberá o objeto SCOPE como argumento, ao invés de Window, como foi feito anteriormente.*
+
+``` javascript
+// scripts/modules/MyModule1/MyModule1.js
+(function (namespace) {
+    function MyModule1 () {
+        // logic here
+    };
+    
+    SCOPE.MyModule1 = (function () {
+        return new MyModule1();
+    })();
+    
+    SCOPE.MyModule1.fn = MyModule1.prototype;
+    
+    return SCOPE.MyModule1;
+})(SCOPE);
+
+console.log(SCOPE.MyModule1);
+// MyModule1 {}
+```
+
+Geralmente, a organização do trabalho fica simplesmente estabelecida como:
+
+```bash
+SCOPE
+    - Module1
+        - ClassA
+        - ClassB
+        - ClassC
+    - Module2
+        - ClassD
+        - ClassE
+        - ClassG
+```
+
+Mas, dependendo da complexidade do nosso fluxo de trabalho, pode ser que exista a necessidade de uma divisão interna a partir de cada módulo 
+
+```bash
+SCOPE
+    - AwesomeModule1
+        - SubMobule1
+            - ClassA
+            - ClassB
+            - ClassC
+        - SubMobule2
+            - ClassD
+            - ClassE
+    - Awesome+Module2
+        - SubMobule3
+            - ClassF
+            - ClassG
+            - ClassH
+        - SubMobule4
+            - ClassI
+            - ClassJ
+```
+
+Então, a partir disto, será necessário gerar os sub módulos:
+
+``` javascript
+// scripts/modules/myModule1/subModules/mySubModule1/mySubModule1.js
+(function (namespace) {
+    function MySubModule1 () {
+        // Logic here
+    }
+
+    SCOPE.MyModule1.MySubModule1 = (function () {
+        return new MySubModule1();
+    })();
+
+    SCOPE.MyModule1.MySubModule1.fn = MySubModule1.prototype;
+
+    return SCOPE.MyModule1.MySubModule1;
+})(SCOPE.MyModule1); 
+
+console.log(SCOPE.MyModule1.MySubModule1);
+// MySubModule1 {}
+```
+
+...
+
+### Final ###
+![Final structure](https://raw.githubusercontent.com/juliogc/oojavascript/master/images/final-structure.jpg)
