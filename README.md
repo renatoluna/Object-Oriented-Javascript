@@ -4,7 +4,7 @@
 
 **Pré-requisitos:** Conhecimento básico em orientação a objetos e javascript.
 
-Leia mais em [wikipedia](http://en.wikipedia.org/wiki/Object_Oriented "Object Oriented Article").
+Leia mais em [wikipedia](http://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos "Orientação a objetos").
 
 - - - 
 
@@ -18,7 +18,7 @@ Todos sabemos que, no javascript, quase tudo é um objeto, até funções e expr
 Também sabemos que o javascript é desprovido de **classes**, mas que a linguagem tem a capacidade de gerar novos objetos que herdem as propriedades de seus construtores, o que nos possibilita simular essa funcionalidade.
 
 Atualmente, na comunidade javascript, já existe um modo aceitável de gerar classes e módulos, como o exemplo abaixo:
-``` javascript
+```javascript
 // Exemplo de simulação de classe em JS
 // Pode ser aplicado para criação de módulos também
 
@@ -127,7 +127,7 @@ Primeiramente, começamos criando um objeto no nosso escopo global. Este objeto 
 
 *Para melhor entendimento, a partir de agora, o primeiro comentário do código a ser explicado será o nome de seu respectivo arquivo existente no diretório [scripts]("https://github.com/juliogc/oojavascript/tree/master/scripts").*
 
-``` javascript
+```javascript
 // scripts/scope.js
 (function (window, document, undefined) {
     var SCOPE = SCOPE || {};
@@ -150,10 +150,13 @@ Os módulos e/ou sub módulos serão uma sub divisão do ```SCOPE {}``` e terá 
 
 *Nota: Observe que, desta vez, a função de encapsulamento receberá o objeto SCOPE como argumento, ao invés de Window, como foi feito anteriormente.*
 
-``` javascript
+```javascript
 // scripts/modules/MyModule1/MyModule1.js
 (function (namespace) {
     function MyModule1 () {
+        var $private = {};
+        var $protected = this;
+        var $public = $protected.constructor.prototype;
         // logic here
     };
     
@@ -170,7 +173,7 @@ console.log(SCOPE.MyModule1);
 // MyModule1 {}
 ```
 
-Geralmente, a organização do trabalho fica simplesmente estabelecida como:
+Geralmente, a organização do trabalho fica estabelecida em uma simples árvore organizacional como:
 
 ```bash
 SCOPE
@@ -184,7 +187,7 @@ SCOPE
         - ClassG
 ```
 
-Mas, dependendo da complexidade do nosso fluxo de trabalho, pode ser que exista a necessidade de uma divisão interna a partir de cada módulo 
+Dependendo da complexidade do nosso fluxo de trabalho, pode ser que exista a necessidade de uma divisão interna minusciosa, nascendo subdivisões em cada módulo:
 
 ```bash
 SCOPE
@@ -196,7 +199,7 @@ SCOPE
         - SubMobule2
             - ClassD
             - ClassE
-    - Awesome+Module2
+    - AwesomeModule2
         - SubMobule3
             - ClassF
             - ClassG
@@ -206,12 +209,15 @@ SCOPE
             - ClassJ
 ```
 
-Então, a partir disto, será necessário gerar os sub módulos:
+E, a partir disto, que será necessário gerar os sub módulos:
 
-``` javascript
+```javascript
 // scripts/modules/myModule1/subModules/mySubModule1/mySubModule1.js
 (function (namespace) {
     function MySubModule1 () {
+        var $private = {};
+        var $protected = this;
+        var $public = $protected.constructor.prototype;
         // Logic here
     }
 
@@ -228,7 +234,97 @@ console.log(SCOPE.MyModule1.MySubModule1);
 // MySubModule1 {}
 ```
 
-...
+### Classes ###
+Em orientação a objetos, uma classe é uma estrutura que unifica um conjunto de objetos com características similares, definindo o comportamento e estado de seus objetos através de métodos e atributos, portanto, é dentro de cada classe que deverá conter toda a lógica do projeto.
+
+```javascript
+// scripts/modules/MyModule1/Classes/MyClassA.js
+(function (namespace) {
+    function MyModuleClassA (element) {
+        var $private = {};
+        var $protected = this;
+        var $public = $protected.constructor.prototype;
+        
+        // Logic here
+    }
+
+    SCOPE.MyModule1.MyModuleClassA = function (element) {
+        return new MyModuleClassA(element);
+    };
+
+    SCOPE.MyModule1.MyModuleClassA.fn = MyModuleClassA.prototype;
+
+    return SCOPE.MyModule1.MyModuleClassA
+})(SCOPE.MyModule1); 
+```
+*Observe que, na função de encapsulamento de classes, o módulo a que ela pertence será recebido como parâmetro principal do escopo.*
+
+Ao trabalhar com classes, dispensa-se o uso de uma função anônima auto-invocada para gerar cada instância. É utilizada uma função anônima que deixa a cargo de seu utilizador o momento de criar a instância através do uso de parenteses ```()``` e declarar os respectivos argumentos, se assim a classe exigir.
+
+### Contexto interno ###
+Ao trabalhar com construtores, é mais do que comum utilizar o ```this``` para manter o escopo de métodos ou propriedades que serão armazenados no ```prototype``` em sua construção e atribuido ao novo objeto quando gerada uma nova instância.
+
+Por inúmeras motivos, é possível que o escopo do **this** se perca e acabe fazendo referência ao objeto ```Window {}``` ou a um método que esteja encapsulado neste mesmo contexto e, visando prevenir esse acontecimento, tornou-se uma boa prática de referenciar este escopo em uma variável comumente nomeada de ```self```.
+
+```javascript
+var self = this;
+```
+
+Tendo como referência outras linguagens de programação, foram criadas três variáveis de nomenclatura padronizada de acordo com a visibilidade de seus membros que são legíveis tanto para leigos quanto para programadores acostumados com outras linguagens.
+
+```javascript
+var $private = {};
+var $protected = this;
+var $public = $protected.constructor.prototype;
+```
+
+É de conhecimento comum que variáveis dentro de uma função só existirão em seu contexto interno e em tempo de execução, sendo inacessíveis fora dessas circunstâncias, já servindo como contexto "protegido", porém, ao se falar em processamento de dados, quanto mais variáveis foram instanciadas no desenvolvimento do código, mais lento será processado e, por este motivo, assumiremos essas três variáveis como únicas em nosso projeto, seja para armazenar métodos ou propriedades.
+
+#### $private ####
+Variável que faz referência a um objeto literal ```{}``` vazio e terá função de armazenamento de propriedades ou métodos que existirção apenas internamente na classe. Através de notações de objeto, é possível acrescentar facilmente novas informações neste contexto dito como privado.
+
+```javascript
+$private.version = '1.0.0';
+
+$private['date'] = new Date();
+
+$private.myInternalMethod = function () {...};
+```
+
+#### $protected ####
+Nasceu da mesma necessidade que o ```self```, no intuito de **proteger** o escopo interno, e tem a capacidade de tornar visivel métodos ou propriedades em novas instâncias que serão herdeiras de determinada classe. Apesar de sua existência, não o seu uso não é recomendável por questões de performance, sendo melhor substituido por ```$public```.
+
+#### $public ####
+Tem a capacidade de tornar disponível para classe e instâncias do objeto todos métodos e propriedades que forem declarados dentro deste contexto.
+
+Esta varíavel é especial pois acessa diretamente o ```prototype``` do construtor da classe, agilizando o processamento de dados no momento em que é gerada a instância a partir da palavra ```new```.
+
+Por fazer referência ao objeto ```prototype``` do construtor é utilizado através de notações de objeto:
+
+```javascript
+$public.log = function (argument) {
+    return console.log(argument);
+};
+
+$public.getVersion = function () {
+    return $public.log($private.version);
+};
+
+$public['showDate'] = function () {
+    return $public.log($private['date'])
+};
+```
+
+### .fn ###
+Ao final de cada exemplo, foi deixado propositalmente uma linha que descrevia uma *dot notation* da instância a ser gerada, nomeada de ```fn```, que faz referência direta ao objeto ```prototype``` de seu construtor:
+
+```javascript
+SCOPE.MyModule1.MyModuleClassA.fn = MyModuleClassA.prototype;
+```
+
+Isso possibilita para que seja possível a adição de novos métodos ou propriedades diretamente no construtor por essa simples ligação com sua instância.
 
 ### Final ###
+Estrutura final de um projeto fictício proposto com essa ideologia.
+
 ![Final structure](https://raw.githubusercontent.com/juliogc/oojavascript/master/images/final-structure.jpg)
