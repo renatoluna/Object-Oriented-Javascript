@@ -322,7 +322,7 @@ Ao final de cada exemplo, foi deixado propositalmente uma linha que descrevia um
 SCOPE.MyModule1.MyModuleClassA.fn = MyModuleClassA.prototype;
 ```
 
-Isso possibilita para que seja possível a adição de novos métodos ou propriedades diretamente no construtor por essa simples ligação com sua instância.
+Isso possibilita a adição de novos métodos ou propriedades diretamente no construtor por essa simples ligação com sua instância.
 
 ### Final ###
 Estrutura final de um projeto fictício proposto com essa ideologia.
