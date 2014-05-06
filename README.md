@@ -61,7 +61,7 @@ window.MyClass();
 // Ambos mostram Window {} no console.
 ```
 
-Trabalhar em cima do objeto window, conhecido por **escopo global**, sempre foi uma prática abominada por todos, seja pelo fato de não poluírmos um contexto que é comum a todos como, também, por questões de segurança da informção.
+Trabalhar em cima do objeto window, conhecido por **escopo global**, sempre foi uma prática abominada por todos, seja pelo fato de não poluírmos um contexto que é comum como, também, por questões de segurança da informção.
 
 O único jeito de invocarmos o modo construtor é a partir da palavra ```new```.
 
