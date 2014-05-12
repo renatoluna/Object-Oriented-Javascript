@@ -1,3 +1,38 @@
+## Encapsulamentos ##
+
+Quando se trabalha com orientação a objetos, e já que em Javascript as classes não existe, deve-se criar vários encapsulamentos para obter a vantagem de se ter vários pequenos escopos regionais, o que facilita com que as suas funções se trabalhem com as suas variáveis locais dos mesmos ou de escopos externos cujos a mesmas estejam inseridas.
+
+Exemplo:
+
+```javascript
+function add (x) {
+    return function (y) {
+        return x + y;
+    };
+}
+
+var add5 = add(5);
+/*
+    No mundo JS o add5 na verdade significa:
+
+    function (y) {
+        return 5 + y;
+    };
+*/
+var no8 = add5(3); // 8
+
+Funções auto-executáveis
+
+Em Javascript temos as self-invoking functions que são funções que são executadas imediatamente cujas criam os próprios encapsulamentos, exemplo:
+
+```javascript
+(function () {
+    var duck = "Donald";
+    alert(duck);
+})();
+
+Neste caso, a variável "duck" só está disponível no contexto desta função, ok, grande idéia esconder patos... mas é aí que a brincadeira fica interessante, agora temos variáveis privadas, ou seja com o encapsulamento conseguimos criar formas de organizar mais o nosso código utilizando padrões mais avançados que facilitam a manutenção do mesmo e que otimizam o uso de recursos como no padrão que criamos através das nossas reuniões do comitê de desenvolvimento:
+
 # Javascript Orientado a Objetos #
 
 - - -
@@ -6,7 +41,7 @@
 
 Leia mais em [wikipedia](http://pt.wikipedia.org/wiki/Orienta%C3%A7%C3%A3o_a_objetos "Orientação a objetos").
 
-- - - 
+- - -
 
 Como todos sabem, o ```javascript``` não possuí **classes** e isso é ótimo para esta linguagem em particular, mas essa situação é um grande causador de dúvidas/problemas/polêmicas para programadores experientes em outras linguagens.
 
@@ -43,13 +78,13 @@ O construtor padrão do javascript será sempre o objeto ```Window {}```.
 ```javascript
 function MyClass () {
     var $protected = this;
-    
+
     function getConstructor () {
         console.log($protected.constructor);
     };
 
     getConstructor();
-    
+
     return $protected;
 };
 
@@ -133,7 +168,7 @@ Primeiramente, começamos criando um objeto no nosso escopo global. Este objeto 
     var SCOPE = SCOPE || {};
 
     window.SCOPE = SCOPE;
-    
+
     return window.SCOPE;
 })(this, document);
 ```
@@ -159,13 +194,13 @@ Os módulos e/ou sub módulos serão uma sub divisão do ```SCOPE {}``` e terá 
         var $public = $protected.constructor.prototype;
         // logic here
     };
-    
+
     SCOPE.MyModule1 = (function () {
         return new MyModule1();
     })();
-    
+
     SCOPE.MyModule1.fn = MyModule1.prototype;
-    
+
     return SCOPE.MyModule1;
 })(SCOPE);
 
@@ -228,7 +263,7 @@ E, a partir disto, que será necessário gerar os sub módulos:
     SCOPE.MyModule1.MySubModule1.fn = MySubModule1.prototype;
 
     return SCOPE.MyModule1.MySubModule1;
-})(SCOPE.MyModule1); 
+})(SCOPE.MyModule1);
 
 console.log(SCOPE.MyModule1.MySubModule1);
 // MySubModule1 {}
@@ -244,7 +279,7 @@ Em orientação a objetos, uma classe é uma estrutura que unifica um conjunto d
         var $private = {};
         var $protected = this;
         var $public = $protected.constructor.prototype;
-        
+
         // Logic here
     }
 
@@ -255,7 +290,7 @@ Em orientação a objetos, uma classe é uma estrutura que unifica um conjunto d
     SCOPE.MyModule1.MyModuleClassA.fn = MyModuleClassA.prototype;
 
     return SCOPE.MyModule1.MyModuleClassA
-})(SCOPE.MyModule1); 
+})(SCOPE.MyModule1);
 ```
 *Observe que, na função de encapsulamento de classes, o módulo a que ela pertence será recebido como parâmetro principal do escopo.*
 
