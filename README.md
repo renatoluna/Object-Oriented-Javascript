@@ -22,7 +22,7 @@ var add5 = add(5);
     };
 */
 var no8 = add5(3); // 8
-
+```
 Funções auto-executáveis
 
 Em Javascript temos as self-invoking functions que são funções que são executadas imediatamente cujas criam os próprios encapsulamentos, exemplo:
@@ -32,7 +32,7 @@ Em Javascript temos as self-invoking functions que são funções que são execu
     var duck = "Donald";
     alert(duck);
 })();
-
+```
 Neste caso, a variável "duck" só está disponível no contexto desta função, ok, grande idéia esconder patos... mas é aí que a brincadeira fica interessante, agora temos variáveis privadas, ou seja com o encapsulamento conseguimos criar formas de organizar mais o nosso código utilizando padrões mais avançados que facilitam a manutenção do mesmo e que otimizam o uso de recursos como no padrão que criamos através das nossas reuniões do comitê de desenvolvimento:
 
 # Padrão de Javascript Orientado a Objetos #
