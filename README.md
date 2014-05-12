@@ -1,3 +1,5 @@
+# Javascript Orientado a Objetos #
+
 ## Encapsulamentos ##
 
 Quando se trabalha com orientação a objetos, e já que em Javascript as classes não existe, deve-se criar vários encapsulamentos para obter a vantagem de se ter vários pequenos escopos regionais, o que facilita com que as suas funções se trabalhem com as suas variáveis locais dos mesmos ou de escopos externos cujos a mesmas estejam inseridas.
@@ -33,7 +35,7 @@ Em Javascript temos as self-invoking functions que são funções que são execu
 
 Neste caso, a variável "duck" só está disponível no contexto desta função, ok, grande idéia esconder patos... mas é aí que a brincadeira fica interessante, agora temos variáveis privadas, ou seja com o encapsulamento conseguimos criar formas de organizar mais o nosso código utilizando padrões mais avançados que facilitam a manutenção do mesmo e que otimizam o uso de recursos como no padrão que criamos através das nossas reuniões do comitê de desenvolvimento:
 
-# Javascript Orientado a Objetos #
+# Padrão de Javascript Orientado a Objetos #
 
 - - -
 
