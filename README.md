@@ -79,15 +79,13 @@ O construtor padrão do javascript será sempre o objeto ```Window {}```.
 
 ```javascript
 function MyClass () {
-    var $protected = this;
+    var $public = this;
 
-    function getConstructor () {
-        console.log($protected.constructor);
+    $public.getConstructor = function () {
+        console.log($public.constructor);
     };
 
-    getConstructor();
-
-    return $protected;
+    $public.getConstructor();
 };
 
 // O javascript interpreta esta construção como:
@@ -153,166 +151,93 @@ Vamos a elas:
 
 O que é        | Como será escrito                                     | Nome        | Modo de escrita
 :--------------|:------------------------------------------------------|:-----------:|:--------------:
-**Escopo**     | Literal Object ```{}```                               | SCOPE       | UPPERCASE
-**Módulo**     | Função anônima auto-invocada ```(function () {})()``` | MyModule    | PascalCase
-**Sub Módulo** | Função anônima auto-invocada ```(function () {})()``` | MySubModule | PascalCase
+**Namespace**     | Literal Object ```{}```                            | NAMESPACE   | UPPERCASE
 **Classe**     | Função anônima ```function () {}```                   | MyClass     | PascalCase
 
-Primeiramente, começamos criando um objeto no nosso escopo global. Este objeto será a única intervenção feita no objeto ```Window {}``` e, a partir dele, estabeleceremos comunição interna entre os ditos módulos, sub módulos e classes. Além de organizar, esta prática visa uma melhoria na gestão de memória durante o processamento do código.
+Primeiramente, começamos criando um objeto no nosso escopo global. Este objeto será a única intervenção feita no objeto ```Window {}``` e, a partir dele, estabeleceremos comunição interna entre as classes. Além de organizar, esta prática visa uma melhoria na gestão de memória durante o processamento do código.
 
-**Para facilitar ao diferenciar dos métodos e propriedades padrões contidas no escopo global, é sugerido que o nome da variável que irá armazenar seja um acrônimo de 3 a 5 letras que se referencie ao nome do projeto ou orgaização mantenedora.**
+**Para facilitar ao diferenciar dos métodos e propriedades padrões contidas no escopo global, é sugerido que o nome da variável que irá armazenar seja um acrônimo de 3 a 5 letras que se referencie ao nome do projeto ou organização mantenedora.**
 
-*Para melhor entendimento, a partir de agora, o primeiro comentário do código a ser explicado será o nome de seu respectivo arquivo existente no diretório [scripts]("https://github.com/juliogc/oojavascript/tree/master/scripts").*
+*Para melhor entendimento, a partir de agora, o primeiro comentário do código a ser explicado será o nome de seu respectivo arquivo existente no diretório scripts.*
 
 ```javascript
-// scripts/scope.js
-(function (window, document, undefined) {
-    var SCOPE = SCOPE || {};
+// scripts/Namespace.js
+function Namespace (packageName) {
 
-    window.SCOPE = SCOPE;
+    var $private = {};
+    var $public = this;
 
-    return window.SCOPE;
-})(this, document);
+    $public.init = function (packageName) {
+        if (typeof packageName !== 'string') {
+            return;
+        }
+
+        if (!window[packageName] === undefined || window[packageName].constructor !== Object) {
+            window[packageName] = {};
+        }
+
+        window[packageName] = window[packageName] || {};
+    };
+
+    return $public.init(packageName);
+}
+
 ```
-Nossa função inicial de encapsulamento recebe o o objeto ```Window {}``` como argumento e insere o objeto literal criado ```SCOPE {}``` que servirá para armazenar toda a lógica daqui em diante. Apos isto, ficará disponível no escopo global o objeto ```window.SCOPE``` (ou somente ```SCOPE```) para cada vez que for necessário utilizá-lo.
+
+```javascript
+// scripts/MYNAMESPACE/init.js
+var namespace = new Namespace('MYNAMESPACE'); // Cria namespace no nível global
+namespace.myClassA = new MyClassA(); // Adiciona as instâncias das classes ao namespace
+
+namespace.myClassA.init(); // inicializa um método público da classe equivalente à window.MYNAMESPACE.myClassA.init();
+```
+Nossa função inicial de encapsulamento recebe o nome do namespace que criará dentro do objeto ```Window {}``` como argumento e insere o objeto literal criado ```MYNAMESPACE {}``` que servirá para armazenar toda a lógica daqui em diante. Apos isto, ficará disponível no escopo global o objeto ```window.MYNAMESPACE``` (ou somente ```MYNAMESPACE```) para cada vez que for necessário utilizá-lo, em seguida, nós adicionamos as instâncias das classes acessíveis ao namespace e inicializamos o nosso fluxo.
 
 Exemplo:
 ```
-console.log(SCOPE);
-// Object {}
-```
-
-### Módulos e Sub Módulos ###
-Os módulos e/ou sub módulos serão uma sub divisão do ```SCOPE {}``` e terá como única função a de agrupar e armazenar classes referentes ao mesmo contexto do fluxo de trabalho. Por conta disso, os módulos serão definidos por funções anônimas auto-invocadas, sendo dispensável o uso de parenteses ```()``` em sua instância para se gerar uma árvore organizacional mais limpa.
-
-*Nota: Observe que, desta vez, a função de encapsulamento receberá o objeto SCOPE como argumento, ao invés de Window, como foi feito anteriormente.*
-
-```javascript
-// scripts/modules/MyModule1/MyModule1.js
-(function (namespace) {
-    function MyModule1 () {
-        var $private = {};
-        var $protected = this;
-        var $public = $protected.constructor.prototype;
-        // logic here
-    };
-
-    SCOPE.MyModule1 = (function () {
-        return new MyModule1();
-    })();
-
-    SCOPE.MyModule1.fn = MyModule1.prototype;
-
-    return SCOPE.MyModule1;
-})(SCOPE);
-
-console.log(SCOPE.MyModule1);
-// MyModule1 {}
-```
-
-Geralmente, a organização do trabalho fica estabelecida em uma simples árvore organizacional como:
-
-```bash
-SCOPE
-    - Module1
-        - ClassA
-        - ClassB
-        - ClassC
-    - Module2
-        - ClassD
-        - ClassE
-        - ClassG
-```
-
-Dependendo da complexidade do nosso fluxo de trabalho, pode ser que exista a necessidade de uma divisão interna minusciosa, nascendo subdivisões em cada módulo:
-
-```bash
-SCOPE
-    - AwesomeModule1
-        - SubMobule1
-            - ClassA
-            - ClassB
-            - ClassC
-        - SubMobule2
-            - ClassD
-            - ClassE
-    - AwesomeModule2
-        - SubMobule3
-            - ClassF
-            - ClassG
-            - ClassH
-        - SubMobule4
-            - ClassI
-            - ClassJ
-```
-
-E, a partir disto, que será necessário gerar os sub módulos:
-
-```javascript
-// scripts/modules/myModule1/subModules/mySubModule1/mySubModule1.js
-(function (namespace) {
-    function MySubModule1 () {
-        var $private = {};
-        var $protected = this;
-        var $public = $protected.constructor.prototype;
-        // Logic here
-    }
-
-    SCOPE.MyModule1.MySubModule1 = (function () {
-        return new MySubModule1();
-    })();
-
-    SCOPE.MyModule1.MySubModule1.fn = MySubModule1.prototype;
-
-    return SCOPE.MyModule1.MySubModule1;
-})(SCOPE.MyModule1);
-
-console.log(SCOPE.MyModule1.MySubModule1);
-// MySubModule1 {}
+console.log(MYNAMESPACE);
+// Object {myClassA: MyClassA}
 ```
 
 ### Classes ###
 Em orientação a objetos, uma classe é uma estrutura que unifica um conjunto de objetos com características similares, definindo o comportamento e estado de seus objetos através de métodos e atributos, portanto, é dentro de cada classe que deverá conter toda a lógica do projeto.
 
 ```javascript
-// scripts/modules/MyModule1/Classes/MyClassA.js
-(function (namespace) {
-    function MyModuleClassA (element) {
-        var $private = {};
-        var $protected = this;
-        var $public = $protected.constructor.prototype;
+// scripts/MYNAMESPACE/Classes/MyClassA.js
+function MyClassA () {
 
-        // Logic here
-    }
+    var $private = {}; // Criação de objeto literal ao qual os atributos e métodos privados estarão presentes.
+    var $public = this; // Técnica de pulo de escopo com a finalidade de evitar problemas de sobreescrita dos valores presentes no this.
 
-    SCOPE.MyModule1.MyModuleClassA = function (element) {
-        return new MyModuleClassA(element);
-    };
+	/*
+		Atributos e métodos públicos e privados
+	*/
+	$private.myClassB = new MyClassB(); // Instância de outra classe sendo armazenada dentro de um atributo privado.
+    $private.myClassB.setElement('div'); // Utilização de método púbico de uma instância de outra classe;
 
-    SCOPE.MyModule1.MyModuleClassA.fn = MyModuleClassA.prototype;
+    // Método público
+	$public.init = function () {
+		$private.appendElement($private.myClassB.getElement());
+	};
 
-    return SCOPE.MyModule1.MyModuleClassA
-})(SCOPE.MyModule1);
+    // Método privado
+	$private.appendElement = function (element) {
+	    document.body.appendChild(element);
+	};
+
+}
 ```
-*Observe que, na função de encapsulamento de classes, o módulo a que ela pertence será recebido como parâmetro principal do escopo.*
-
-Ao trabalhar com classes, dispensa-se o uso de uma função anônima auto-invocada para gerar cada instância. É utilizada uma função anônima que deixa a cargo de seu utilizador o momento de criar a instância através do uso de parenteses ```()``` e declarar os respectivos argumentos, se assim a classe exigir.
 
 ### Contexto interno ###
 Ao trabalhar com construtores, é mais do que comum utilizar o ```this``` para manter o escopo de métodos ou propriedades que serão armazenados no ```prototype``` em sua construção e atribuido ao novo objeto quando gerada uma nova instância.
 
-Por inúmeras motivos, é possível que o escopo do **this** se perca e acabe fazendo referência ao objeto ```Window {}``` ou a um método que esteja encapsulado neste mesmo contexto e, visando prevenir esse acontecimento, tornou-se uma boa prática de referenciar este escopo em uma variável comumente nomeada de ```self```.
+Por inúmeras motivos, é possível que o escopo do **this** se perca e acabe fazendo referência ao objeto ```Window {}``` ou a um método que esteja encapsulado neste mesmo contexto e, visando prevenir esse acontecimento, tornou-se uma boa prática utilizar a técnica de pulo de escopo referenciar este escopo do this em uma variável.
 
-```javascript
-var self = this;
-```
-
-Tendo como referência outras linguagens de programação, foram criadas três variáveis de nomenclatura padronizada de acordo com a visibilidade de seus membros que são legíveis tanto para leigos quanto para programadores acostumados com outras linguagens.
+Tendo como referência outras linguagens de programação, foram criadas duas variáveis de nomenclatura padronizada de acordo com a visibilidade de seus membros que são legíveis tanto para leigos quanto para programadores acostumados com outras linguagens.
 
 ```javascript
 var $private = {};
-var $protected = this;
-var $public = $protected.constructor.prototype;
+var $public = this;
 ```
 
 É de conhecimento comum que variáveis dentro de uma função só existirão em seu contexto interno e em tempo de execução, sendo inacessíveis fora dessas circunstâncias, já servindo como contexto "protegido", porém, ao se falar em processamento de dados, quanto mais variáveis foram instanciadas no desenvolvimento do código, mais lento será processado e, por este motivo, assumiremos essas três variáveis como únicas em nosso projeto, seja para armazenar métodos ou propriedades.
@@ -328,40 +253,8 @@ $private['date'] = new Date();
 $private.myInternalMethod = function () {...};
 ```
 
-#### $protected ####
-Nasceu da mesma necessidade que o ```self```, no intuito de **proteger** o escopo interno, e tem a capacidade de tornar visivel métodos ou propriedades em novas instâncias que serão herdeiras de determinada classe. Apesar de sua existência, não o seu uso não é recomendável por questões de performance, sendo melhor substituido por ```$public```.
+#### $public ####
+Nasceu a partir da necessidade do pulo de escopo, no intuito de **proteger** o escopo interno, e tem a capacidade de tornar visivel métodos ou propriedades em novas instâncias que serão herdeiras de determinada classe..
 
 #### $public ####
 Tem a capacidade de tornar disponível para classe e instâncias do objeto todos métodos e propriedades que forem declarados dentro deste contexto.
-
-Esta varíavel é especial pois acessa diretamente o ```prototype``` do construtor da classe, agilizando o processamento de dados no momento em que é gerada a instância a partir da palavra ```new```.
-
-Por fazer referência ao objeto ```prototype``` do construtor é utilizado através de notações de objeto:
-
-```javascript
-$public.log = function (argument) {
-    return console.log(argument);
-};
-
-$public.getVersion = function () {
-    return $public.log($private.version);
-};
-
-$public['showDate'] = function () {
-    return $public.log($private['date'])
-};
-```
-
-### .fn ###
-Ao final de cada exemplo, foi deixado propositalmente uma linha que descrevia uma *dot notation* da instância a ser gerada, nomeada de ```fn```, que faz referência direta ao objeto ```prototype``` de seu construtor:
-
-```javascript
-SCOPE.MyModule1.MyModuleClassA.fn = MyModuleClassA.prototype;
-```
-
-Isso possibilita a adição de novos métodos ou propriedades diretamente no construtor por essa simples ligação com sua instância.
-
-### Final ###
-Estrutura final de um projeto fictício proposto com essa ideologia.
-
-![Final structure](https://raw.githubusercontent.com/juliogc/oojavascript/master/images/final-structure.jpg)
