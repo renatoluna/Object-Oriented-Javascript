@@ -1,0 +1,10 @@
+#JS GETTERANDSETTER
+	$public.get${1:Method} = function () {
+		return $private.${2:argument}
+	};
+
+	$public.set${1:Method} = function (${2:argument}) {
+		if (${3:condition}) {
+			return $private.${2:argument}
+		}
+	};
