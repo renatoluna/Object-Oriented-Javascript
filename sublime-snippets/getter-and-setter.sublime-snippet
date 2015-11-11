@@ -1,0 +1,16 @@
+<snippet>
+	<content><![CDATA[
+\$public.get${0:MethodName} = function () {
+	return \$private.${1:parameter};
+};
+
+\$public.set${0:MethodName} = function (${1:parameter}) {
+	if ({2:condition}) {
+		\$private.${1:parameter} = ${1:parameter};
+	}
+};
+]]></content>
+	<tabTrigger>public</tabTrigger>
+	<scope>source.js</scope>
+	<description>Generate getter and setter for OO JS</description>
+</snippet>

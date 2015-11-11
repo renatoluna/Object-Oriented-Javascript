@@ -1,33 +1,11 @@
 <snippet>
 	<content><![CDATA[
-(function (namespace) {
-	function ${3:Class} () {
-	/* 
-	    Internal namespaces
-	   ========================================================================== */
+	function ${1:Class} () {
 		var \$private = {};
-		var \$protected = this;
-		var \$public = \$protected.constructor.prototype;
+		var \$public = this;
 
-	/* 
-	    Privates
-	   ========================================================================== */
-		${0}
-	/* 
-	    Publics
-	   ========================================================================== */
-
-		return \$protected;
+		${2:methodsAndAttributes}
 	}
-
-	${1:SCOPE}.${2:Module}.${3:Class} = function () {
-		return new ${3:Class}();
-	};
-
-	${1:SCOPE}.${2:Module}.${3:Class}.fn = ${3:Class}.prototype;
-
-	return ${1:SCOPE}.${2:Module}.${3:Class};
-})(${1:SCOPE}.${2:Module});
 ]]></content>
 	<tabTrigger>Class</tabTrigger>
 	<scope>source.js</scope>
