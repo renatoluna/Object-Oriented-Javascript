@@ -2,7 +2,7 @@
 
 ## Encapsulamentos ##
 
-Quando se trabalha com orientação a objetos, e já que em Javascript as classes não existe, deve-se criar vários encapsulamentos para obter a vantagem de se ter vários pequenos escopos regionais, o que facilita com que as suas funções se trabalhem com as suas variáveis locais dos mesmos ou de escopos externos cujos a mesmas estejam inseridas.
+Quando se trabalha com orientação a objetos, e já que em Javascript as classes não existem, deve-se criar vários encapsulamentos para obter a vantagem de se ter vários pequenos escopos regionais, o que facilita com que as suas funções trabalhem com as suas variáveis locais dos mesmos ou de escopos externos cujos a mesmas estejam inseridas.
 
 Exemplo:
 
@@ -33,7 +33,7 @@ Em Javascript temos as self-invoking functions que são funções que são execu
     alert(duck);
 })();
 ```
-Neste caso, a variável "duck" só está disponível no contexto desta função, ok, grande idéia esconder patos... mas é aí que a brincadeira fica interessante, agora temos variáveis privadas, ou seja com o encapsulamento conseguimos criar formas de organizar mais o nosso código utilizando padrões mais avançados que facilitam a manutenção do mesmo e que otimizam o uso de recursos como no padrão que criamos através das nossas reuniões do comitê de desenvolvimento:
+Neste caso, a variável "duck" só está disponível no contexto desta função, ok, grande idéia esconder patos... Mas é aí que a brincadeira fica interessante, agora temos variáveis privadas, ou seja com o encapsulamento conseguimos criar formas de organizar mais o nosso código utilizando padrões mais avançados que facilitam a manutenção do mesmo e que otimizam o uso de recursos como no padrão que criamos através das nossas reuniões do comitê de desenvolvimento:
 
 # Padrão de Javascript Orientado a Objetos #
 
@@ -50,7 +50,7 @@ Como todos sabem, o ```javascript``` não possuí **classes** e isso é ótimo p
 Mesmo sendo diferente de outras linguagens clássicas na forma de implementar a orientação a objetos, o conceito é extamente o mesmo e fazemos isso visando uma forma de trabalhar que seja simples e organizada, para evitar um possível *code refactoring* ou métodos duplicados.
 
 ## Conceito ##
-Todos sabemos que, no javascript, quase tudo é um objeto, até funções e expreções regulares. Um ```objeto``` é algo provido de características e faz determinadas coisas, comumente conhecidos como **propriedades** e **métodos**, respectivamente.
+Todos sabemos que, no javascript, quase tudo é um objeto, até funções e expressões regulares. Um ```objeto``` é algo provido de características e faz determinadas coisas, comumente conhecidos como **propriedades** e **métodos**, respectivamente.
 
 Também sabemos que o javascript é desprovido de **classes**, mas que a linguagem tem a capacidade de gerar novos objetos que herdem as propriedades de seus construtores, o que nos possibilita simular essa funcionalidade.
 
@@ -70,7 +70,7 @@ var myClass = new Class();
 
 Este código é bastante interessante e funciona bem. Ao fazer isso, cada vez que utilizar a variável ```myClass```, será feita uma referência a uma instância da classe ```MyClass```, dando acesso à todos os seus métodos públicos. Essa prática pode ser pouco usual em determinados contextos como, por exemplo, seja necessário realizar um ```prototype``` de um novo método diretamente no ```constructor``` da respectiva classe.
 
-Antes de nos aprofundarmos nesta nova metodologia proposta de herança no javascritp, vamos entender um pouco mais a funcionalidade de ```constructors```, ```prototype``` e da palavra restrita ```new```.
+Antes de nos aprofundarmos nesta nova metodologia proposta de herança no javascript, vamos entender um pouco mais a funcionalidade de ```constructors```, ```prototype``` e da palavra restrita ```new```.
 
 ### O que é um ```construtor```? ###
 Pode ser denominado como construtor qualquer função utilizada como construtora, a linguagem não faz uma distinção com relação a isso. Uma função pode ser utilizada com função de construtora, para ser chamada como uma função normal ou de ambos os jeitos.
@@ -96,7 +96,7 @@ window.MyClass();
 // Ambos mostram Window {} no console.
 ```
 
-Trabalhar em cima do objeto window, conhecido por **escopo global**, sempre foi uma prática abominada por todos, seja pelo fato de não poluírmos um contexto que é comum como, também, por questões de segurança da informção.
+Trabalhar em cima do objeto window, conhecido por **escopo global**, sempre foi uma prática abominada por todos, seja pelo fato de não poluírmos um contexto que é comum, como também por questões de segurança da informação.
 
 O único jeito de invocarmos o modo construtor é a partir da palavra ```new```.
 
@@ -123,7 +123,7 @@ myClass instanceof MyClass // true
 
 Uma ```Function``` é um tipo especial de objeto que, como qualquer objeto comum possui propriedades. Ao chamar uma função, ela ganha automaticamente uma propriedade chamada ```prototype```, que será um objeto literal ```{}``` onde serão armazenados todos os métodos e propriedades ditos como **públicos**, sendo identificados no escopo do próprio construtor pelo uso da palavra ```this```.
 
-Caso não exista nenhum método ou propriedade no escopo público, será criado um objeto **vazio**. Significando, então, que sempre existirá a propriedade ```prototype``` ao final da chamada de nossas funções, seja ele vazio ou contendo métodos e propriedades públicos.
+Caso não exista nenhum método ou propriedade no escopo público, será criado um objeto **vazio**. Significando então, que sempre existirá a propriedade ```prototype``` ao final da chamada de nossas funções, seja ele vazio ou contendo métodos e propriedades públicos.
 
 ```javascript
 MyClass.prototype.version = 1.0.0;
@@ -191,7 +191,7 @@ namespace.myClassA = new MyClassA(); // Adiciona as instâncias das classes ao n
 
 namespace.myClassA.init(); // inicializa um método público da classe equivalente à window.MYNAMESPACE.myClassA.init();
 ```
-Nossa função inicial de encapsulamento recebe o nome do namespace que criará dentro do objeto ```Window {}``` como argumento e insere o objeto literal criado ```MYNAMESPACE {}``` que servirá para armazenar toda a lógica daqui em diante. Apos isto, ficará disponível no escopo global o objeto ```window.MYNAMESPACE``` (ou somente ```MYNAMESPACE```) para cada vez que for necessário utilizá-lo, em seguida, nós adicionamos as instâncias das classes acessíveis ao namespace e inicializamos o nosso fluxo.
+Nossa função inicial de encapsulamento recebe o nome do namespace que criará dentro do objeto ```Window {}``` como argumento e insere o objeto literal criado ```MYNAMESPACE {}``` que servirá para armazenar toda a lógica daqui em diante. Após isto, ficará disponível no escopo global o objeto ```window.MYNAMESPACE``` (ou somente ```MYNAMESPACE```) para cada vez que for necessário utilizá-lo, em seguida, nós adicionamos as instâncias das classes acessíveis ao namespace e inicializamos o nosso fluxo.
 
 Exemplo:
 ```
@@ -209,21 +209,21 @@ function MyClassA () {
     var $private = {}; // Criação de objeto literal ao qual os atributos e métodos privados estarão presentes.
     var $public = this; // Técnica de pulo de escopo com a finalidade de evitar problemas de sobreescrita dos valores presentes no this.
 
-	/*
-		Atributos e métodos públicos e privados
-	*/
-	$private.myClassB = new MyClassB(); // Instância de outra classe sendo armazenada dentro de um atributo privado.
+    /*
+        Atributos e métodos públicos e privados
+    */
+    $private.myClassB = new MyClassB(); // Instância de outra classe sendo armazenada dentro de um atributo privado.
     $private.myClassB.setElement('div'); // Utilização de método púbico de uma instância de outra classe;
 
     // Método público
-	$public.init = function () {
-		$private.appendElement($private.myClassB.getElement());
-	};
+    $public.init = function () {
+        $private.appendElement($private.myClassB.getElement());
+    };
 
     // Método privado
-	$private.appendElement = function (element) {
-	    document.body.appendChild(element);
-	};
+    $private.appendElement = function (element) {
+        document.body.appendChild(element);
+    };
 
 }
 ```
@@ -231,7 +231,7 @@ function MyClassA () {
 ### Contexto interno ###
 Ao trabalhar com construtores, é mais do que comum utilizar o ```this``` para manter o escopo de métodos ou propriedades que serão armazenados no ```prototype``` em sua construção e atribuido ao novo objeto quando gerada uma nova instância.
 
-Por inúmeras motivos, é possível que o escopo do **this** se perca e acabe fazendo referência ao objeto ```Window {}``` ou a um método que esteja encapsulado neste mesmo contexto e, visando prevenir esse acontecimento, tornou-se uma boa prática utilizar a técnica de pulo de escopo referenciar este escopo do this em uma variável.
+Por inúmeros motivos, é possível que o escopo do **this** se perca e acabe fazendo referência ao objeto ```Window {}``` ou a um método que esteja encapsulado neste mesmo contexto e, visando prevenir esse acontecimento, tornou-se uma boa prática utilizar a técnica de pulo de escopo (referenciar o escopo do **this** em uma variável).
 
 Tendo como referência outras linguagens de programação, foram criadas duas variáveis de nomenclatura padronizada de acordo com a visibilidade de seus membros que são legíveis tanto para leigos quanto para programadores acostumados com outras linguagens.
 
@@ -243,7 +243,7 @@ var $public = this;
 É de conhecimento comum que variáveis dentro de uma função só existirão em seu contexto interno e em tempo de execução, sendo inacessíveis fora dessas circunstâncias, já servindo como contexto "protegido", porém, ao se falar em processamento de dados, quanto mais variáveis foram instanciadas no desenvolvimento do código, mais lento será processado e, por este motivo, assumiremos essas três variáveis como únicas em nosso projeto, seja para armazenar métodos ou propriedades.
 
 #### $private ####
-Variável que faz referência a um objeto literal ```{}``` vazio e terá função de armazenamento de propriedades ou métodos que existirção apenas internamente na classe. Através de notações de objeto, é possível acrescentar facilmente novas informações neste contexto dito como privado.
+Variável que faz referência a um objeto literal ```{}``` vazio e terá função de armazenamento de propriedades ou métodos que existirão apenas internamente na classe. Através de notações de objeto, é possível acrescentar facilmente novas informações neste contexto dito como privado.
 
 ```javascript
 $private.version = '1.0.0';
@@ -254,7 +254,6 @@ $private.myInternalMethod = function () {...};
 ```
 
 #### $public ####
-Nasceu a partir da necessidade do pulo de escopo, no intuito de **proteger** o escopo interno, e tem a capacidade de tornar visivel métodos ou propriedades em novas instâncias que serão herdeiras de determinada classe..
+Nasceu a partir da necessidade do pulo de escopo, no intuito de **proteger** o escopo interno, e tem a capacidade de tornar visível métodos ou propriedades em novas instâncias que serão herdeiras de determinada classe.  
 
-#### $public ####
 Tem a capacidade de tornar disponível para classe e instâncias do objeto todos métodos e propriedades que forem declarados dentro deste contexto.
