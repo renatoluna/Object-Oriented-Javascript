@@ -151,7 +151,7 @@ Vamos a elas:
 
 O que é        | Como será escrito                                     | Nome        | Modo de escrita
 :--------------|:------------------------------------------------------|:-----------:|:--------------:
-**Namespace**     | Literal Object ```{}```                            | NAMESPACE   | UPPERCASE
+**Namespace**  | Literal Object ```{}```                               | NAMESPACE   | UPPERCASE
 **Classe**     | Função anônima ```function () {}```                   | MyClass     | PascalCase
 
 Primeiramente, começamos criando um objeto no nosso escopo global. Este objeto será a única intervenção feita no objeto ```Window {}``` e, a partir dele, estabeleceremos comunição interna entre as classes. Além de organizar, esta prática visa uma melhoria na gestão de memória durante o processamento do código.
